@@ -1,0 +1,310 @@
+﻿.apply-component ::deep .content-area {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr 4fr;
+    padding: 30px 0;
+}
+
+    .apply-component ::deep .content-area .filter-area {
+        width: 100%;
+        border: 0.5px solid #CBC4C4;
+        box-shadow: 0px 4px 4px rgba(104, 98, 98, 0.7);
+        border-radius: 10px;
+        height: auto;
+        padding: 10px;
+    }
+
+
+    .apply-component ::deep .content-area .publi-area {
+        display: inline-flex;
+        flex-flow: column;
+        overflow: hidden;
+    }
+
+    .apply-component ::deep .content-area .publi-respostas-area:hover {
+        background: #efefef;
+    }
+
+    .apply-component ::deep .content-area .publi-respostas-area.publi-selected .publi .info-publi-rating {
+        position: absolute !Important;
+        max-width: 20% !Important;
+        width: auto !important;
+        min-width: 250px !Important;
+        top: 2px !Important;
+        border-radius: 0 0 0 9px !Important;
+        margin-left: 80% !Important;
+        padding: 3px !Important;
+        background: #9d62ba !Important;
+        transition: all 0.7s ease-out !Important;
+        max-height: auto !Important;
+        transform: scaleY(1) !Important;
+        display: inline-flex;
+        color: white;
+        gap: 4px;
+        font-size: 10px;
+    }
+
+        .apply-component ::deep .content-area .publi-respostas-area.publi-selected .publi .info-publi-rating * {
+            opacity: 1;
+            transition: max-height,opacity 0.7s ease-out;
+        }
+
+    .apply-component ::deep .content-area .publi-area .publi {
+        position: relative;
+        display: inline-flex;
+        height: auto;
+        width: 100%;
+        padding: 20px;
+        gap: 8px;
+    }
+
+        /*.apply-component ::deep .content-area .publi-area .publi:last-child::after {
+                content: none;
+            }*/
+
+        .apply-component ::deep .content-area .publi-area .publi::after {
+            content: '';
+            position: absolute;
+            width: 90%;
+            height: 1.5px;
+            top: 0;
+            border-radius: 9px;
+            margin-left: 10%;
+            background: #9d62ba;
+            transition: all 0.4s ease-out;
+        }
+
+        .apply-component ::deep .content-area .publi-area .publi:hover .info-publi-rating {
+            position: absolute !Important;
+            max-width: 20% !Important;
+            width: auto !important;
+            min-width: 250px !Important;
+            top: 2px !Important;
+            border-radius: 0 0 0 9px !Important;
+            margin-left: 80% !Important;
+            padding: 3px !Important;
+            background: #9d62ba !Important;
+            transition: all 0.7s ease-out !Important;
+            max-height: auto !Important;
+            transform: scaleY(1) !Important;
+            display: inline-flex;
+            color: white;
+            gap: 4px;
+            font-size: 10px;
+        }
+
+        .apply-component ::deep .content-area .publi-area .publi:hover:after {
+            height: 3.5px;
+            transition: all 0.2s ease-out;
+        }
+
+        .apply-component ::deep .content-area .publi-area .publi:not(:hover) .info-publi-rating {
+            position: absolute;
+            transform: scaleY(0);
+            transform-origin: top;
+            width: 15%;
+            min-width: 194px;
+            top: -2px;
+            margin-left: 85%;
+            padding: 0;
+            background: #ffffff;
+            transition: all 0.7s ease-out;
+            color: white;
+            display: inline-flex;
+            gap: 4px;
+            font-size: 10px;
+        }
+
+            .apply-component ::deep .content-area .publi-area .publi:not(:hover) .info-publi-rating .icon-rating-area .icon-rating {
+            }
+
+    .apply-component ::deep .content-area .publi-area:not(:hover) .info-publi-rating * {
+        opacity: 0;
+        transition: max-height,opacity 0.7s ease-out;
+    }
+
+
+
+    .apply-component ::deep .content-area .publi-area .publi .publi-content-area {
+        width: 100%;
+    }
+
+    .apply-component ::deep .content-area .publi-area .publi .user-icon {
+        width: 45px;
+        height: 45px;
+    }
+
+    .apply-component ::deep .content-area .publi-area .publi .info-publi {
+        padding: 5px;
+    }
+
+        .apply-component ::deep .content-area .publi-area .publi .info-publi info-publi-rating {
+            width: 100%;
+        }
+
+        .apply-component ::deep .content-area .publi-area .publi .info-publi .info-publi-nome {
+            width: 100%;
+            font-family: Vivo-font;
+        }
+
+        .apply-component ::deep .content-area .publi-area .publi .info-publi .info-publi-second-line {
+            width: 100%;
+            display: inline-flex;
+            justify-content: space-between;
+            font-family: Vivo-font-light;
+            align-items: center;
+        }
+
+            .apply-component ::deep .content-area .publi-area .publi .info-publi .info-publi-second-line .info-publi-tema {
+                display: inline-flex;
+                flex-flow: column;
+                letter-spacing: 1.5px;
+                font-size: 12px;
+            }
+
+.apply-component ::deep .publi .content-publi label {
+    word-break: break-word;
+}
+
+.apply-component ::deep .content-area .publi-area .publi .info-publi .info-publi-second-line .info-publi-hora {
+    height: auto;
+    font-size: 12px;
+}
+
+
+.apply-component ::deep .content-area .publi-area .respostas-area {
+    position: relative;
+    padding-left: 10%;
+    width: 100%;
+}
+
+  /*  .apply-component ::deep .content-area .publi-area .respostas-area.hide-respostas {
+        display: none;
+    }
+
+    .apply-component ::deep .content-area .publi-area .respostas-area.show-respostas {
+        display: initial;
+    }
+
+    .apply-component ::deep .content-area .publi-area .respostas-area::before {
+        position: absolute;
+        content: '';
+        height: 100%;
+        top: -50%;
+        left: 4.25%;
+        background: black;
+        width: 2px;
+    }
+
+    .apply-component ::deep .content-area .publi-area .respostas-area .publi {
+        position: relative;
+    }
+
+        .apply-component ::deep .content-area .publi-area .respostas-area .publi::before {
+            content: '';
+            position: absolute;
+            width: 45px;
+            top: 50%;
+            left: -6.40%;
+            background: black;
+            height: 2px;
+            border-radius: 0 0 0 2px;
+        }
+
+            .apply-component ::deep .content-area .publi-area .respostas-area .publi::before::after {
+                content: '>';
+                right: 0;
+                color: black;
+                position: absolute;
+            }
+
+        .apply-component ::deep .content-area .publi-area .respostas-area .publi:last-child::before {
+            content: none;
+        }
+
+*/
+.apply-component ::deep .footer-page {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    width: auto;
+    height: 70px;
+    display: inline-flex;
+    gap: 20px;
+    background-color: transparent;
+    padding-inline: 10px;
+    padding-block: 5px;
+    border-radius: 10px;
+}
+
+    .apply-component ::deep .footer-page aside svg {
+        background-color: #eb3c7d !important;
+        border-radius: 50%;
+        margin: 7px;
+        padding: 9px;
+    }
+
+    .apply-component ::deep .footer-page:has(.footer-open) aside svg {
+        transform: rotate(180deg);
+    }
+
+    .apply-component ::deep .footer-page:has(.footer-open) {
+        background-color: white !important;
+        box-shadow: var(--elevation-shadow-card-rest) !important;
+    }
+
+        .apply-component ::deep .footer-page:not(.footer-open) aside svg, .apply-component ::deep .footer-page:has(.footer-open), .apply-component ::deep .footer-page:not(.footer-open), .apply-component ::deep .footer-page:has(.footer-open) aside svg {
+            transition: all 0.5s linear;
+        }
+/*        .apply-component ::deep .footer-page:has(.footer-open) svg
+        {
+            transform:rotateX(45deg);
+            transition: all 1s linear;
+        }*/
+
+.apply-component ::deep .footer-open {
+    width: 90vh !important;
+    opacity: 1;
+    z-index: 0;
+    transition: all 1s ease-in;
+    align-content: center;
+    align-items: center;
+}
+
+.apply-component ::deep fluent-button {
+    color: white !important;
+    fill: white !important;
+}
+
+.apply-component ::deep .footer-open fluent-button {
+    animation: 1s ease-out ButtonAnimation forwards;
+}
+
+@keyframes ButtonAnimation {
+    0% {
+        width: 20px !important;
+    }
+
+    25% {
+        width: 30% !important;
+    }
+
+    50% {
+        width: 60% !important;
+    }
+
+    75% {
+        width: 80% !important;
+    }
+
+    100% {
+        width: 100% !important;
+    }
+}
+
+.apply-component ::deep .footer-closed {
+    width: 0 !important;
+    opacity: 0;
+    z-index: -1;
+    transition: all 1s ease-out;
+}

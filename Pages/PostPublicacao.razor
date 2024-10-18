@@ -1,0 +1,63 @@
+﻿@using ForumRTCZ.ViewModels;
+@using Microsoft.AspNetCore.Components;
+@using Microsoft.Extensions.Logging.Abstractions;
+@using Shared_Static_Class.Data;
+@using Shared_Static_Class.Model_DTO;
+@page "/publicacao/add"
+
+<PageTitle>Nova Publicação</PageTitle>
+<header class="top-row p-sm-2 d-inline-flex justify-content-between align-items-center gap-2 w-100">
+    <div></div>
+    <h4 style="font-family:Vivo-font-bold;">NOVA PUBLICAÇÃO</h4>
+    <div></div>
+</header>
+<div class="apply-component">
+    <br />
+    @if (!vm.IsBusy)
+    {
+        <div class="publi-respostas-area">
+            <div class="publi">
+                <aside>
+                    <img class="user-icon" src="_content/Shared_Razor_Components/images/usericon.png" />
+                </aside>
+                <div class="publi-content-area">
+                    <header class="info-publi">
+                        <span class="info-publi-nome">
+                            @textInfo.ToTitleCase(vm.Userservice.User.NOME.ToLower())
+                        </span>
+                        <div class="info-publi-second-line">
+                            <div class="info-publi-tema">
+                                <span style="text-align:center">
+                                    Tema:
+                                    <FluentSelect TOption="JORNADA_BD_TEMAS_SUB_TEMA" Items="Temas.GroupBy(x => x.ID_TEMAS).Select(x => x.First())" 
+                                        SelectedOptionChanged="@(args => Model.Tema.ID_TEMAS = args.ID_TEMAS)" Height="300px"
+                                        OptionText="x=> x.TEMAS">
+                                            <FluentOption Value="0">
+                                                Selecione
+                                            </FluentOption>
+                                    </FluentSelect>
+                                </span>
+                                <span style="text-align:center">
+                                    Sub Tema:
+                                    <FluentSelect TOption="JORNADA_BD_TEMAS_SUB_TEMA" Items="Temas.Where(x => x.ID_TEMAS == Model.Tema.ID_TEMAS)"
+                                                  SelectedOptionChanged="@(args => Model.Tema.ID_SUB_TEMAS = args.ID_SUB_TEMAS)" Height="300px">
+                                        <FluentOption Value="0">
+                                            Selecione
+                                        </FluentOption>
+                                    </FluentSelect>
+                                </span>
+                            </div>
+                            <span class="info-publi-hora">
+                                @Model.HORA.ToString("dd/MM/yyyy")
+                            </span>
+                        </div>
+                    </header>
+                    <article class="content-publi">
+                        <FluentTextArea @bind-Value=@Model.TEXT_PUBLICACAO Class="w-100" Placeholder="Escreva aqui sua solicitação de publicação para o fórum do Giro V">
+                        </FluentTextArea>
+                    </article>
+                </div>
+            </div>
+        </div>
+    }
+</div>

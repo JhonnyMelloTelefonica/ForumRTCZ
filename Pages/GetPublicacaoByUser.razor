@@ -1,0 +1,294 @@
+﻿@page "/get/publicacao/user"
+@attribute [Authorize("CanSeeForumGiroV")]
+<PageTitle>Forum Giro V</PageTitle>
+
+<div class="apply-component">
+    <section class="content-area">
+        <aside class="filter-area">
+            <span id="page-filters-header" class="d-inline-flex justify-content-between w-100">
+                <FluentButton IconEnd="@(new Icons.Filled.Size24.Search().WithColor("#fffffff"))"
+                              Appearance="Appearance.Accent" BackgroundColor="#9d62ba"
+                              OnClick="@(() => Get(1))">
+                    Filtros
+                </FluentButton>
+                <PopUpTemasDisponiveis />
+            </span>
+            <div class="p-3">
+                <label class="filter-card-title">
+                    Pesquisar tema
+                </label>
+                <div class="info-publi-tema">
+                    <span style="text-align:center">
+                        Tema:
+                        <FluentSelect TOption="JORNADA_BD_TEMAS_SUB_TEMA"
+                                      @bind-Value=value
+                                      Items="Temas.GroupBy(x => x.ID_TEMAS).Select(x => x.First())"
+                                      Height="300px"
+                                      Placeholder="Selecione" OptionText="x=> x.TEMAS">
+                        </FluentSelect>
+                    </span>
+
+                    <span style="text-align:center">
+                        Sub Tema:
+                        @if (!string.IsNullOrEmpty(value))
+                        {
+                            <FluentSelect TOption="JORNADA_BD_TEMAS_SUB_TEMA"
+                                          Items="Temas.Where(x => x.TEMAS == value)"
+                                          @bind-SelectedOption=Model.Tema Height="300px"
+                                          Placeholder="Selecione" OptionText="x=> x.SUB_TEMAS">
+                            </FluentSelect>
+                        }
+                        else
+                        {
+                            <FluentSelect TOption="string" Disabled>
+                                <FluentOption Value="0">
+                                    Selecione
+                                </FluentOption>
+                            </FluentSelect>
+                        }
+                    </span>
+                </div>
+            </div>
+
+            <div class="p-3">
+                <label class="filter-card-title">
+                    Avaliação
+                </label>
+                <div>
+                    <Rating @bind-SelectedValue=@vm.filter.avaliacao Color="@("#f45294")" Class="w-100" MaxValue="5" />
+                </div>
+            </div>
+        </aside>
+        <div class="publi-area">
+            @if (!vm.IsBusy)
+            {
+                if (AddNewPublicacao)
+                {
+                    <div class="publi-respostas-area publi-selected">
+                        <div class="publi">
+                            <div class="info-publi-rating">
+                                <div class="w-100 d-flex justify-content-start" style="cursor:pointer;">
+                                    <FluentButton IconEnd="@(new Icons.Filled.Size24.Add().WithColor("#ffffff"))"
+                                                  Appearance="Appearance.Accent" BackgroundColor="transparent"
+                                                  OnClick="PostPublicacao">
+                                    </FluentButton>
+                                    <FluentIcon Value="@(new Icons.Filled.Size24.DismissCircle().WithColor("#ffffff"))"
+                                                @onclick="@(() => AddNewPublicacao = !AddNewPublicacao)" />
+                                </div>
+                            </div>
+                            <aside>
+                                <img class="user-icon" src="_content/Shared_Razor_Components/images/usericon.png" />
+                            </aside>
+                            <div class="publi-content-area">
+                                <header class="info-publi">
+                                    <span class="info-publi-nome">
+                                        @textInfo.ToTitleCase(vm.Userservice.User.NOME.ToLower())
+                                    </span>
+                                    <div class="info-publi-second-line">
+                                        <div class="info-publi-tema">
+                                            <span style="text-align:center">
+                                                Tema:
+                                                <FluentSelect TOption="JORNADA_BD_TEMAS_SUB_TEMA"
+                                                              @bind-Value=value
+                                                              Items="Temas.GroupBy(x => x.ID_TEMAS).Select(x => x.First())"
+                                                              Height="300px"
+                                                              Placeholder="Selecione" OptionText="x=> x.TEMAS">
+                                                </FluentSelect>
+                                            </span>
+
+                                            <span style="text-align:center">
+                                                Sub Tema:
+                                                @if (!string.IsNullOrEmpty(value))
+                                                {
+                                                    <FluentSelect TOption="JORNADA_BD_TEMAS_SUB_TEMA"
+                                                                  Items="Temas.Where(x => x.TEMAS == value)"
+                                                                  @bind-SelectedOption=Model.Tema Height="300px"
+                                                                  Placeholder="Selecione" OptionText="x=> x.SUB_TEMAS">
+                                                    </FluentSelect>
+                                                }
+                                                else
+                                                {
+                                                    <FluentSelect TOption="string" Disabled>
+                                                        <FluentOption Value="0">
+                                                            Selecione
+                                                        </FluentOption>
+                                                    </FluentSelect>
+                                                }
+                                            </span>
+                                        </div>
+                                        <span class="info-publi-hora">
+                                            @Model.HORA.ToString("dd/MM/yyyy")
+                                        </span>
+                                    </div>
+                                </header>
+                                <article class="content-publi">
+                                    <FluentTextArea @bind-Value=@Model.TEXT_PUBLICACAO Class="w-100" Placeholder="Escreva aqui sua solicitação de publicação para o fórum do Giro V">
+                                    </FluentTextArea>
+                                </article>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                }
+                if (vm.Data.Any())
+                {
+                    @foreach (var item in vm.Data)
+                    {
+                        <div class="publi-respostas-area @(item.Selected ? "publi-selected":"")" @onclick="@item.SetSelected">
+                            <div class="publi">
+                                <div class="info-publi-rating">
+                                    <VivoRating Disable IsGold ActionValueChanged="@(value => SetAvaliacaoToPublicacao (value, item))" Value="@item.ActualAvaliacao" />
+                                    @if (item.QtdAvaliacao > 0)
+                                    {
+                                        <span>(@item.QtdAvaliacao)</span>
+                                    }
+                                </div>
+                                <aside>
+                                    <img class="user-icon" src="_content/Shared_Razor_Components/images/usericon.png" />
+                                </aside>
+                                <div class="publi-content-area">
+                                    <header class="info-publi">
+                                        <span class="info-publi-nome">
+                                            @textInfo.ToTitleCase(item.Responsavel.NOME.ToLower())
+                                        </span>
+                                        <div class="info-publi-second-line">
+                                            <div class="info-publi-tema">
+                                                <span>@item.Tema.TEMAS</span>
+                                                <span>@item.Tema.SUB_TEMAS</span>
+                                            </div>
+                                            <span class="info-publi-hora">
+                                                @item.HORA.ToString("dd/MM/yyyy")
+                                            </span>
+                                        </div>
+                                    </header>
+                                    <article class="content-publi">
+                                        <label>
+                                            @item.TEXT_PUBLICACAO
+                                        </label>
+                                    </article>
+                                </div>
+                            </div>
+                            <section class="respostas-area @(item.ShowRespostas ? "show-respostas":"hide-respostas")">
+                                @foreach (var resposta in item.Respostasdto)
+                                {
+                                    <div class="publi">
+                                        <div class="info-publi-rating">
+                                            <VivoRating IsGold ActionValueChanged="@(value => SetAvaliacaoToRespostaPublicacao(value, resposta))" Value="@resposta.ActualAvaliacao" />
+                                            @if (resposta.QtdAvaliacao > 0)
+                                            {
+                                                <span>(@resposta.QtdAvaliacao)</span>
+                                            }
+                                        </div>
+                                        <aside>
+                                            <img class="user-icon" src="_content/Shared_Razor_Components/images/usericon.png" />
+                                        </aside>
+                                        <div class="publi-content-area">
+                                            <header class="info-publi">
+                                                <span class="info-publi-nome">
+                                                    @textInfo.ToTitleCase(resposta.Solicitante.NOME.ToLower())
+                                                </span>
+                                                <div class="info-publi-second-line">
+                                                    <span class="info-publi-hora">
+                                                        @resposta.HORA.ToString("dd/MM/yyyy")
+                                                    </span>
+                                                </div>
+                                            </header>
+                                            <article class="content-publi">
+                                                <label>
+                                                    @resposta.TEXT_PUBLICACAO
+                                                </label>
+                                            </article>
+                                        </div>
+                                    </div>
+                                }
+                            </section>
+                        </div>
+                    }
+                    @if (vm.Data.Any())
+                    {
+                        <div class="d-inline-flex justify-content-center align-content-center w-100 h-auto overflow-auto gap-3">
+                            @if (!vm.DataResponse.isFirstpage)
+                            {
+                                <FluentButton BackgroundColor="#9046b3" Color="#ffffff" @onclick="() => Get(1)">
+                                    <span>
+                                        1
+                                    </span>
+                                </FluentButton>
+                                <FluentButton Color="#9046b3" @onclick="() => Get(vm.DataResponse.PageNumber - 1)">
+                                    <Blazorise.Icon Name="Blazorise.IconName.AngleLeft">
+                                    </Blazorise.Icon>
+                                </FluentButton>
+                            }
+
+                            @for (int i = vm.DataResponse.PageNumber - 2; i < vm.DataResponse.PageNumber + 3; i++)
+                            {
+                                if (i > 0 && i <= vm.DataResponse.TotalPages)
+                                {
+                                    var value = i;
+                                    if (i == vm.DataResponse.PageNumber)
+                                    {
+                                        <FluentButton Color="#ffffff" BackgroundColor="#9046b3">
+                                            @value
+                                        </FluentButton>
+                                    }
+                                    else
+                                    {
+                                        <FluentButton Color="#9046b3" @onclick="() => Get(value)">
+                                            @value
+                                        </FluentButton>
+                                    }
+                                }
+                            }
+
+                            @if (!vm.DataResponse.isLastpage)
+                            {
+                                <FluentButton Color="#9046b3" @onclick="() => Get(vm.DataResponse.PageNumber + 1)">
+                                    <Blazorise.Icon Name="Blazorise.IconName.AngleRight">
+                                    </Blazorise.Icon>
+                                </FluentButton>
+                                <FluentButton Color="#ffffff" BackgroundColor="#9046b3" @onclick="() => Get(vm.DataResponse.TotalPages)">
+                                    <span>@vm.DataResponse.TotalPages</span>
+                                </FluentButton>
+                            }
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="w-100 d-inline-flex flex-column align-items-center">
+                        <span class="title">
+                            <h3>
+                                Não há nenhuma publicação disponível
+                            </h3>
+                        </span>
+                        <h6>
+                            Não foi encontrado nenhum dado para os filtros especificados
+                        </h6>
+                    </div>
+                }
+            }
+            else
+            {
+                <span class="spinner-border spinner-border-sm"></span>
+            }
+        </div>
+    </section>
+    @* FOOTER *@
+    <section class="footer-page" @onmouseenter="MouseFooterEnter" @onmouseleave=MouseFooterLeave>
+        <aside>
+            <FluentIcon Value="@(new Icons.Filled.Size48.Question().WithColor("#ffffff"))" />
+        </aside>
+        <div class="@(FooterOpen ? "footer-open": "footer-closed")" style="">
+            <FluentButton BackgroundColor="#53a63f" OnClick="@(() => AddNewPublicacao = !AddNewPublicacao)">
+                <FluentIcon Value="@(new Icons.Filled.Size24.AddSquare().WithColor("#ffffff"))" Slot="start" />
+                Nova Publicação
+            </FluentButton>
+        </div>
+    </section>
+    @* FOOTER *@
+</div>
+
+
+
+

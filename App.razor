@@ -1,0 +1,59 @@
+﻿@inject UserCard User;
+@using Shared_Razor_Components.Shared
+
+<CascadingAuthenticationState>
+    <FluentDesignSystemProvider AccentBaseColor="@(OfficeColor.OneNote.GetDisplayDescription())">
+        <Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies="@(new[] { typeof(Shared_Razor_Components.ServiceCollectionExtensions).Assembly })">
+            <Found Context="routeData">
+                <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                    <NotAuthorized>
+                        <Unauthorized />
+                    </NotAuthorized>
+                    <Authorizing>
+                        <h1>Autenticação em progresso</h1>
+                        @* <p>Only visible while authentication is in progress.</p> *@
+                    </Authorizing>
+                </AuthorizeRouteView>
+                <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+            </Found>
+            <NotFound>
+                <PageTitle>Não Encontrado</PageTitle>
+                <LayoutView Layout="@typeof(MainLayout)">
+                    <p role="alert">Desculpe, não há nada neste endereço.</p>
+                </LayoutView>
+            </NotFound>
+        </Router>
+    </FluentDesignSystemProvider>
+
+    <FluentDialogProvider />
+    <FluentDesignTheme Mode="DesignThemeModes.Light" OfficeColor="OfficeColor.OneNote" />
+    <MessageProvider />
+    <ApplicationLoadingIndicator FadeIn FadeInDuration="TimeSpan.FromMicroseconds(200)" FullScreen IndicatorHorizontalPlacement="LoadingIndicatorPlacement.Middle" IndicatorVerticalPlacement="LoadingIndicatorPlacement.Middle">
+        <IndicatorTemplate>
+            <Animate Animation="Blazorise.Animate.Animations.FadeDownRight" Auto Duration="TimeSpan.FromMilliseconds( 700 )">
+                <Div>
+                    <Blazorise.SpinKit.SpinKit Type="SpinKitType.Wave" Size="100px" />
+                </Div>
+            </Animate>
+        </IndicatorTemplate>
+    </ApplicationLoadingIndicator>
+    <ModalProvider UseModalStructure Animated Size="Blazorise.ModalSize.Default">
+    </ModalProvider>
+    <RadzenDialog />
+
+    <UserCard @ref="User" />
+</CascadingAuthenticationState>
+
+@code
+{
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            User.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        User.OnChange -= StateHasChanged;
+    }
+}

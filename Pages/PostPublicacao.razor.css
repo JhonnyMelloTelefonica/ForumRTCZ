@@ -1,0 +1,227 @@
+﻿.apply-component ::deep {
+    height:auto;
+    min-height:70vh;
+}
+.apply-component ::deep .publi-respostas-area:hover {
+    background: #efefef;
+}
+
+.apply-component ::deep .publi-respostas-area.publi-selected .publi .info-publi-rating {
+    position: absolute !Important;
+    width: 15% !Important;
+    min-width: 194px !Important;
+    top: 2px !Important;
+    border-radius: 0 0 0 9px !Important;
+    margin-left: 85% !Important;
+    padding: 3px !Important;
+    background: #9d62ba !Important;
+    transition: all 0.7s ease-out !Important;
+    max-height: auto !Important;
+    transform: scaleY(1) !Important;
+}
+
+    .apply-component ::deep .publi-respostas-area.publi-selected .publi .info-publi-rating * {
+        opacity: 1;
+        transition: max-height,opacity 0.7s ease-out;
+    }
+
+.apply-component ::deep .publi {
+    position: relative;
+    display: inline-flex;
+    height: auto;
+    width: 100%;
+    padding: 20px;
+    gap: 8px;
+}
+
+    /*.apply-component ::deep   .publi:last-child::after {
+                content: none;
+            }*/
+
+    .apply-component ::deep .publi::after {
+        content: '';
+        position: absolute;
+        width: 90%;
+        height: 1.5px;
+        top: 0;
+        border-radius: 9px;
+        margin-left: 10%;
+        background: #9d62ba;
+        transition: all 0.4s ease-out;
+    }
+
+    .apply-component ::deep .publi:hover .info-publi-rating {
+        position: absolute;
+        width: 15%;
+        min-width: 194px;
+        top: 2px;
+        border-radius: 0 0 0 9px;
+        margin-left: 85%;
+        padding: 3px;
+        background: #9d62ba;
+        transition: all 0.7s ease-out;
+        max-height: auto;
+        transform: scaleY(1);
+    }
+
+    .apply-component ::deep .publi:hover:after {
+        height: 3.5px;
+        transition: all 0.2s ease-out;
+    }
+
+    .apply-component ::deep .publi:not(:hover) .info-publi-rating {
+        position: absolute;
+        transform: scaleY(0);
+        transform-origin: top;
+        width: 15%;
+        min-width: 194px;
+        top: -2px;
+        margin-left: 85%;
+        padding: 0;
+        background: #ffffff;
+        transition: all 0.7s ease-out;
+    }
+
+        .apply-component ::deep .publi:not(:hover) .info-publi-rating .icon-rating-area .icon-rating {
+        }
+
+.apply-component ::deep :not(:hover) .info-publi-rating * {
+    opacity: 0;
+    transition: max-height,opacity 0.7s ease-out;
+}
+
+
+
+.apply-component ::deep .publi .publi-content-area {
+    width: 100%;
+}
+
+.apply-component ::deep .publi .user-icon {
+    width: 45px;
+    height: 45px;
+}
+
+.apply-component ::deep .publi .info-publi {
+    padding: 5px;
+}
+
+    .apply-component ::deep .publi .info-publi info-publi-rating {
+        width: 100%;
+    }
+
+    .apply-component ::deep .publi .info-publi .info-publi-nome {
+        width: 100%;
+        font-family: Vivo-font;
+    }
+
+    .apply-component ::deep .publi .info-publi .info-publi-second-line {
+        width: 100%;
+        display: inline-flex;
+        justify-content: space-between;
+        font-family: Vivo-font-light;
+        align-items: center;
+    }
+
+        .apply-component ::deep .publi .info-publi .info-publi-second-line .info-publi-tema {
+            display: inline-flex;
+            flex-flow: column;
+            letter-spacing: 1.5px;
+            font-size: 12px;
+        }
+
+        .apply-component ::deep .publi .info-publi .info-publi-second-line .info-publi-hora {
+            height: auto;
+            font-size: 12px;
+        }
+
+.apply-component ::deep .respostas-area {
+    position: relative;
+    padding-left: 10%;
+    width: 100%;
+}
+
+.apply-component ::deep .footer-page {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    width: auto;
+    height: 70px;
+    display: inline-flex;
+    gap: 20px;
+    background-color: transparent;
+    padding-inline: 10px;
+    padding-block: 5px;
+    border-radius: 10px;
+}
+
+    .apply-component ::deep .footer-page aside svg {
+        background-color: #eb3c7d !important;
+        border-radius: 50%;
+        margin: 7px;
+        padding: 9px;
+    }
+
+    .apply-component ::deep .footer-page:has(.footer-open) aside svg {
+        transform: rotate(180deg);
+    }
+
+    .apply-component ::deep .footer-page:has(.footer-open) {
+        background-color: white !important;
+        box-shadow: var(--elevation-shadow-card-rest) !important;
+    }
+
+        .apply-component ::deep .footer-page:not(.footer-open) aside svg, .apply-component ::deep .footer-page:has(.footer-open), .apply-component ::deep .footer-page:not(.footer-open), .apply-component ::deep .footer-page:has(.footer-open) aside svg {
+            transition: all 0.5s linear;
+        }
+/*        .apply-component ::deep .footer-page:has(.footer-open) svg
+        {
+            transform:rotateX(45deg);
+            transition: all 1s linear;
+        }*/
+
+.apply-component ::deep .footer-open {
+    width: 90vh !important;
+    opacity: 1;
+    z-index: 0;
+    transition: all 1s ease-in;
+    align-content: center;
+    align-items: center;
+}
+
+.apply-component ::deep fluent-button {
+    color: white !important;
+    fill: white !important;
+}
+
+.apply-component ::deep .footer-open fluent-button {
+    animation: 1s ease-out ButtonAnimation forwards;
+}
+
+@keyframes ButtonAnimation {
+    0% {
+        width: 20px !important;
+    }
+
+    25% {
+        width: 30% !important;
+    }
+
+    50% {
+        width: 60% !important;
+    }
+
+    75% {
+        width: 80% !important;
+    }
+
+    100% {
+        width: 100% !important;
+    }
+}
+
+.apply-component ::deep .footer-closed {
+    width: 0 !important;
+    opacity: 0;
+    z-index: -1;
+    transition: all 1s ease-out;
+}
