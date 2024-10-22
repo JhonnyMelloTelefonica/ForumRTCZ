@@ -1,62 +1,89 @@
 ﻿@page "/get/publicacao/user"
 @attribute [Authorize("CanSeeForumGiroV")]
-<PageTitle>Forum Giro V</PageTitle>
+<PageTitle>Fórum Giro V</PageTitle>
+
+<SetHeader @ref=header>
+    <div class="d-inline-flex w-100 justify-content-center gap-4 p-2 align-items-center">
+        <h3 style="color:#9867c5;font-family:Vivo-font-bold;">MINHAS PUBLICAÇÕES</h3>
+    </div>
+</SetHeader>
 
 <div class="apply-component">
     <section class="content-area">
         <aside class="filter-area">
-            <span id="page-filters-header" class="d-inline-flex justify-content-between w-100">
-                <FluentButton IconEnd="@(new Icons.Filled.Size24.Search().WithColor("#fffffff"))"
-                              Appearance="Appearance.Accent" BackgroundColor="#9d62ba"
-                              OnClick="@(() => Get(1))">
-                    Filtros
-                </FluentButton>
-                <PopUpTemasDisponiveis />
-            </span>
             <div class="p-3">
-                <label class="filter-card-title">
-                    Pesquisar tema
-                </label>
+                <div>
+                    <label class="filter-card-title">
+                        Pesquisar
+                    </label>
+                    <div>
+                        <FluentTextArea @bind-Value=vm.filter.search Placeholder="Publicações..." Class="w-100" Appearance="FluentInputAppearance.Outline" />
+                    </div>
+                </div>
+                <br />
                 <div class="info-publi-tema">
                     <span style="text-align:center">
                         Tema:
-                        <FluentSelect TOption="JORNADA_BD_TEMAS_SUB_TEMA"
-                                      @bind-Value=value
-                                      Items="Temas.GroupBy(x => x.ID_TEMAS).Select(x => x.First())"
-                                      Height="300px"
-                                      Placeholder="Selecione" OptionText="x=> x.TEMAS">
-                        </FluentSelect>
+                        <FluentAutocomplete TOption="JORNADA_BD_TEMAS_SUB_TEMA" Id="tema" Immediate OnOptionsSearch="OnSearchTema"
+                                            IconDismiss="@(new Icons.Filled.Size12.Dismiss().WithColor("#9d62ba"))" AutoComplete="off"
+                                            ShowOverlayOnEmptyResults SelectedOptionsChanged="@(args => vm.filter.tema = args.Select(x=> x.ID_TEMAS ?? 0).ToList())"
+                                            OptionText="x=> x.TEMAS" Multiple
+                                            Height="150px" Placeholder="Selecione">
+                        </FluentAutocomplete>
                     </span>
-
+                    <div class="d-inline-flex flex-wrap justify-content-around gap-2 w-100">
+                        @foreach (var item in vm.filter.tema)
+                        {
+                            <RadzenBadge BadgeStyle="Radzen.BadgeStyle.Light" IsPill>
+                                @(Temas.First(x => x.ID_TEMAS == item).TEMAS)
+                                @* <FluentIcon Value="@(new Icons.Filled.Size12.Dismiss().WithColor("#9d62ba"))" @onclick=@(()=> vm.filter.tema.Remove(item)) /> *@
+                            </RadzenBadge>
+                        }
+                    </div>
+                    <br />
                     <span style="text-align:center">
                         Sub Tema:
-                        @if (!string.IsNullOrEmpty(value))
+                        @if (vm.filter.tema.Any())
                         {
-                            <FluentSelect TOption="JORNADA_BD_TEMAS_SUB_TEMA"
-                                          Items="Temas.Where(x => x.TEMAS == value)"
-                                          @bind-SelectedOption=Model.Tema Height="300px"
-                                          Placeholder="Selecione" OptionText="x=> x.SUB_TEMAS">
-                            </FluentSelect>
+                            <FluentAutocomplete TOption="JORNADA_BD_TEMAS_SUB_TEMA" OnOptionsSearch="OnSearchSubTema"
+                                                IconDismiss="@(new Icons.Filled.Size12.Dismiss().WithColor("#9d62ba"))" AutoComplete="off" ShowOverlayOnEmptyResults
+                                                SelectedOptionsChanged="@(args => vm.filter.subtema = args.Select(x=> x.ID_SUB_TEMAS).ToList())"
+                                                Height="150px" Placeholder="Selecione"
+                                                OptionText="x=> x.SUB_TEMAS" Multiple>
+                            </FluentAutocomplete>
                         }
                         else
                         {
-                            <FluentSelect TOption="string" Disabled>
-                                <FluentOption Value="0">
-                                    Selecione
-                                </FluentOption>
-                            </FluentSelect>
+                            <FluentAutocomplete TOption="JORNADA_BD_TEMAS_SUB_TEMA" Disabled>
+                            </FluentAutocomplete>
                         }
                     </span>
+                    <div class="d-inline-flex flex-wrap justify-content-around gap-2  w-100">
+                        @foreach (var item in vm.filter.subtema)
+                        {
+                            <RadzenBadge BadgeStyle="Radzen.BadgeStyle.Light" IsPill>
+                                @(Temas.First(x => x.ID_SUB_TEMAS == item).SUB_TEMAS)
+                                @* <FluentIcon Value="@(new Icons.Filled.Size12.Dismiss().WithColor("#9d62ba"))" @onclick=@(()=> vm.filter.subtema.Remove(item)) /> *@
+                            </RadzenBadge>
+                        }
+                    </div>
                 </div>
-            </div>
-
-            <div class="p-3">
-                <label class="filter-card-title">
-                    Avaliação
-                </label>
                 <div>
-                    <Rating @bind-SelectedValue=@vm.filter.avaliacao Color="@("#f45294")" Class="w-100" MaxValue="5" />
+                    <label class="filter-card-title">
+                        Avaliação de Publicações
+                    </label>
+                    <div>
+                        <Rating @bind-SelectedValue=@vm.filter.avaliacao Color="@("#f45294")" Class="w-100" MaxValue="5" />
+                    </div>
                 </div>
+                <br />
+                <span id="page-filters-header" class="d-inline-flex justify-content-between w-100">
+                    <FluentButton IconEnd="@(new Icons.Filled.Size24.Search().WithColor("#fffffff"))"
+                                  Appearance="Appearance.Accent" BackgroundColor="#9d62ba"
+                                  OnClick="@(() => Get(1))">
+                        Filtrar
+                    </FluentButton>
+                </span>
             </div>
         </aside>
         <div class="publi-area">
@@ -280,7 +307,7 @@
             <FluentIcon Value="@(new Icons.Filled.Size48.Question().WithColor("#ffffff"))" />
         </aside>
         <div class="@(FooterOpen ? "footer-open": "footer-closed")" style="">
-            <FluentButton BackgroundColor="#53a63f" OnClick="@(() => AddNewPublicacao = !AddNewPublicacao)">
+            <FluentButton BackgroundColor="#53a63f" OnClick="@OpenNewPubliArea">
                 <FluentIcon Value="@(new Icons.Filled.Size24.AddSquare().WithColor("#ffffff"))" Slot="start" />
                 Nova Publicação
             </FluentButton>

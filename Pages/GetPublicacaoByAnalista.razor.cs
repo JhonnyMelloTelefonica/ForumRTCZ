@@ -1,5 +1,6 @@
 using ForumRTCZ.ViewModels;
 using Microsoft.AspNetCore.Components;
+using Shared_Razor_Components.Layout;
 using Shared_Static_Class.Data;
 using Shared_Static_Class.Model_DTO;
 using Shared_Static_Class.Model_DTO.FilterModels;
@@ -16,6 +17,7 @@ namespace ForumRTCZ.Pages
         bool AddNewPublicacao { get; set; } = false;
         [CascadingParameter] public RESPOSTA_PUBLICACAODTO Model { get; set; } = null;
         private IEnumerable<JORNADA_BD_TEMAS_SUB_TEMA> Temas { get; set; } = [];
+        SetHeader header;
         string value { get; set; }
         [Inject] ForumRTCZViewModel vm { get; set; }
         private void OnStateChanged(object? sender, PropertyChangedEventArgs e) => InvokeAsync(StateHasChanged);
@@ -45,6 +47,8 @@ namespace ForumRTCZ.Pages
                 Temas = await vm.GetTemas(true);
                 vm.isBusy = false;
                 await InvokeAsync(StateHasChanged);
+                if (header != null)
+                    header.Update();
             }
             await base.OnAfterRenderAsync(firstRender);
         }

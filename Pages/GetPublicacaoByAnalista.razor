@@ -1,26 +1,41 @@
 ﻿@page "/get/publicacao/analista"
 @attribute [Authorize("VIVOX_FORUM_GIROV_ADM")]
 
-<PageTitle>Forum Giro V</PageTitle>
+<PageTitle>Fórum Giro V</PageTitle>
+
+<SetHeader @ref=header>
+    <div class="d-inline-flex w-100 justify-content-center gap-4 p-2 align-items-center">
+        <h3 style="color:#9867c5;font-family:Vivo-font-bold;">RESPONDER PUBLICAÇÕES</h3>
+    </div>
+</SetHeader>
 
 <div class="apply-component">
     <section class="content-area">
         <aside class="filter-area">
-            <span id="page-filters-header" class="d-inline-flex justify-content-between w-100">
-                <FluentButton IconEnd="@(new Icons.Filled.Size24.Search().WithColor("#fffffff"))"
-                              Appearance="Appearance.Accent" BackgroundColor="#9d62ba"
-                              OnClick="@(() => Get(1))">
-                    Filtros
-                </FluentButton>
-                <PopUpTemasDisponiveis />
-            </span>
-            <div class="p-3">
+            <div>
                 <label class="filter-card-title">
-                    Avaliação
+                    Pesquisar
                 </label>
                 <div>
-                    <Rating @bind-SelectedValue=@vm.filter.avaliacao Color="@("#f45294")" Class="w-100" MaxValue="5" />
+                    <FluentTextArea @bind-Value=vm.filter.search Placeholder="Publicações..." Class="w-100" Appearance="FluentInputAppearance.Outline" />
                 </div>
+                <div>
+                    <label class="filter-card-title">
+                        Avaliação de Publicações
+                    </label>
+                    <div>
+                        <Rating @bind-SelectedValue=@vm.filter.avaliacao Color="@("#f45294")" Class="w-100" MaxValue="5" />
+                    </div>
+                </div>
+                <br />
+
+                <span id="page-filters-header" class="d-inline-flex justify-content-between w-100">
+                    <FluentButton IconEnd="@(new Icons.Filled.Size24.Search().WithColor("#fffffff"))"
+                                  Appearance="Appearance.Accent" BackgroundColor="#9d62ba"
+                                  OnClick="@(() => Get(1))">
+                        Filtros
+                    </FluentButton>
+                </span>
             </div>
         </aside>
         <div class="publi-area">

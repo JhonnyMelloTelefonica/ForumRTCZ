@@ -1,5 +1,10 @@
 using ForumRTCZ.ViewModels;
 using Microsoft.AspNetCore.Components;
+using Microsoft.FluentUI.AspNetCore.Components;
+using Microsoft.FluentUI.AspNetCore.Components.Utilities;
+using Microsoft.JSInterop;
+using Shared_Razor_Components.Layout;
+using Shared_Razor_Components.Shared;
 using Shared_Static_Class.Data;
 using Shared_Static_Class.Model_DTO;
 using Shared_Static_Class.Model_DTO.FilterModels;
@@ -17,6 +22,8 @@ namespace ForumRTCZ.Pages
         bool AddNewPublicacao { get; set; } = false;
         [CascadingParameter] public PUBLICACAO_SOLICITACAODTO Model { get; set; } = null;
         private IEnumerable<JORNADA_BD_TEMAS_SUB_TEMA> Temas { get; set; } = [];
+        IJSObjectReference _jsmodule;
+        SetHeader header;
         string value { get; set; }
         [Inject] ForumRTCZViewModel vm { get; set; }
         private void OnStateChanged(object? sender, PropertyChangedEventArgs e) => InvokeAsync(StateHasChanged);
@@ -36,19 +43,38 @@ namespace ForumRTCZ.Pages
             };
             base.OnInitialized();
         }
-
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
             {
-                //_jsmodule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/Shared_Razor_Components/Shared/ProdutoCard.razor.js");
+                _jsmodule = await vm.JSRuntime.InvokeAsync<IJSObjectReference>("import", $"./{string.Join('/', this.GetType().FullName.Split('.').Skip(1))}.razor.js");
                 vm.isBusy = true;
                 await vm.Get(ByUser:true);
                 Temas = await vm.GetTemas();
                 vm.isBusy = false;
+                if (header != null)
+                    header.Update();
                 await InvokeAsync(StateHasChanged);
             }
             await base.OnAfterRenderAsync(firstRender);
+        }
+        private void OnSearchTema(OptionsSearchEventArgs<JORNADA_BD_TEMAS_SUB_TEMA> e)
+        {
+            var temas = Temas.GroupBy(x => x.ID_TEMAS).Select(x => x.First());
+            e.Items = temas.Where(i => i.TEMAS.StartsWith(e.Text, StringComparison.OrdinalIgnoreCase))
+                                  .OrderBy(i => i.TEMAS);
+        }
+        private void OnSearchSubTema(OptionsSearchEventArgs<JORNADA_BD_TEMAS_SUB_TEMA> e)
+        {
+            var temas = Temas.Where(x => vm.filter.tema.Contains(x.ID_TEMAS.Value));
+            e.Items = temas.Where(i => i.SUB_TEMAS.StartsWith(e.Text, StringComparison.OrdinalIgnoreCase))
+                                  .OrderBy(i => i.SUB_TEMAS);
+        }
+        async void OpenNewPubliArea()
+        {
+            AddNewPublicacao = !AddNewPublicacao;
+            if (AddNewPublicacao)
+                await _jsmodule.InvokeVoidAsync("FocusOnNewPubli");
         }
         async void Get(int? value)
         {
