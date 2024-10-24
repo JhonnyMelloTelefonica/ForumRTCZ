@@ -1,4 +1,5 @@
-﻿using BlazorDownloadFile;
+﻿using Shared_Static_Class.Model;
+using BlazorDownloadFile;
 using Blazorise.LoadingIndicator;
 using CurrieTechnologies.Razor.SweetAlert2;
 using Microsoft.AspNetCore.Components;
@@ -151,7 +152,7 @@ namespace ForumRTCZ.ViewModels
         }
         public async Task<bool> PostPublicacao(PUBLICACAO_SOLICITACAODTO data)
         {
-            var result = await ForumRTCZService.PostPublicacao(data);
+            var result = await ForumRTCZService.PostPublicacao(new PublicacaoModel(data.TEXT_PUBLICACAO,data.SUB_TEMA,data.MAT_RESPONSAVEL,DateTime.Now));
             if (result.IsSuccess)
             {
                 var saida = JsonConvert.DeserializeObject<Response<object>>(result.Content.ToString());
@@ -198,7 +199,7 @@ namespace ForumRTCZ.ViewModels
         }
         public async Task<bool> PostRespostaPublicacao(RESPOSTA_PUBLICACAODTO data)
         {
-            var result = await ForumRTCZService.PostRespostaPublicacao(data);
+            var result = await ForumRTCZService.PostRespostaPublicacao(new RespostaPublicacaoModel(data.ID_SOLICITACAO_PUBLICACAO,data.TEXT_PUBLICACAO,data.MAT_SOLICITANTE,DateTime.Now));
             if (result.IsSuccess)
             {
                 var saida = JsonConvert.DeserializeObject<Response<object>>(result.Content.ToString());
@@ -250,7 +251,7 @@ namespace ForumRTCZ.ViewModels
             if (id_argumentacao != Guid.Empty)
             {
                 var saidasingleimage = await ForumRTCZService.PostAvaliacaoToPublicacao(
-                    new AVALIACAO_PUBLICACAO(null, id_argumentacao, Userservice.User.MATRICULA, value)
+                    new AvaliacaoPublicacaoModel(id_argumentacao,Userservice.User.MATRICULA,value)
                     );
 
                 if (saidasingleimage.IsSuccess)

@@ -59,10 +59,6 @@ builder.Services.AddSignalR(options =>
     // Set the maximum size for incoming and outgoing messages
     options.MaximumReceiveMessageSize = 102400000; // Set to the desired maximum size in bytes
 });
-builder.Services.AddResponseCompression(op =>
-{
-    op.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] { "application/octet-stream" });
-});
 
 builder.Services.AddSweetAlert2();
 
